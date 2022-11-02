@@ -53,14 +53,20 @@ def transFunc(data, otherArgs):
         translatecommon.setOutputNull(otherArgs.nullVals, data.output1)
         rieglInfo = otherArgs.rieglInfo
 
+        keys = ['PHI_INC','THETA_INC','BEAM_EXIT_DIAMETER','BEAM_DIVERGENCE',
+                'LONGITUDE','LATITUDE','HEIGHT','HMSL']
+        for key in keys:
+            if key not in rieglInfo:
+                rieglInfo[key] = 0
+
         data.output1.setHeaderValue("PULSE_ANGULAR_SPACING_SCANLINE", 
-                rieglInfo["PHI_INC"])
+            rieglInfo["PHI_INC"])
         data.output1.setHeaderValue("PULSE_ANGULAR_SPACING_SCANLINE_IDX",
-                rieglInfo["THETA_INC"])
+            rieglInfo["THETA_INC"])
         data.output1.setHeaderValue("SENSOR_BEAM_EXIT_DIAMETER",
-                rieglInfo["BEAM_EXIT_DIAMETER"])
+            rieglInfo["BEAM_EXIT_DIAMETER"])
         data.output1.setHeaderValue("SENSOR_BEAM_DIVERGENCE",
-                rieglInfo["BEAM_DIVERGENCE"])
+            rieglInfo["BEAM_DIVERGENCE"])
 
         if otherArgs.epsg is not None:
             sr = osr.SpatialReference()
@@ -75,6 +81,8 @@ def transFunc(data, otherArgs):
 
         # Extra Info?? Not sure if this should be handled 
         # as separate fields in the header
+        
+
         meta = {'Transform': rotationMatrixList,
             'Longitude': rieglInfo['LONGITUDE'],
             'Latitude': rieglInfo['LATITUDE'],
