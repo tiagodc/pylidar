@@ -84,6 +84,8 @@ def addRieglRXPDriver(extModules, cxxFlags):
                                 os.path.join(riwavelibRoot, 'include')],
                 extra_compile_args=cxxFlags,
                 libraries=libs,
+                runtime_library_dirs=[os.path.join(rivlibRoot, 'lib'),
+                                os.path.join(riwavelibRoot, 'lib')],
                 library_dirs=[os.path.join(rivlibRoot, 'lib'),
                                 os.path.join(riwavelibRoot, 'lib')])
                  
@@ -145,6 +147,7 @@ def addRieglRDBDriver(extModules, cxxFlags):
                 include_dirs=[os.path.join(rdblibRoot, "interface", "c")],
                 extra_compile_args=cxxFlags,
                 libraries=[rdbLibName],
+                runtime_library_dirs=[os.path.join(rdblibRoot, 'library')],
                 library_dirs=[os.path.join(rdblibRoot, 'library')])
                  
         extModules.append(rieglRDBModule)
@@ -322,6 +325,7 @@ def addPulseWavesDriver(extModules, cxxFlags):
                 extra_compile_args=cxxFlags,
                 define_macros = [NUMPY_MACROS],
                 libraries=['pulsewaves'],
+                runtime_library_dirs=[os.path.join(pulseWavesRoot, 'lib')],
                 library_dirs=[os.path.join(pulseWavesRoot, 'lib')])
                 
         extModules.append(pulseWavesModule)
@@ -331,6 +335,7 @@ def addPulseWavesDriver(extModules, cxxFlags):
 
 # get any C++ flags
 cxxFlags = getExtraCXXFlags()
+
 # work out if we need to build any of the C/C++ extension
 # modules
 externalModules = []
@@ -370,5 +375,6 @@ setup(name='pylidar',
           'Programming Language :: Python :: 3.3',
           'Programming Language :: Python :: 3.4',
           'Programming Language :: Python :: 3.5',
-          'Programming Language :: Python :: 3.6'])
+          'Programming Language :: Python :: 3.6',
+          'Programming Language :: Python :: 3.7'])
       
