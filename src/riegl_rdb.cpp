@@ -154,8 +154,10 @@ typedef struct
     double xyz[3]; // riegl.xyz
     
     // pulses
-    npy_int32 row;  // riegl.row - can be negative
-    npy_int32 column; // riegl.column ditto
+    // npy_int32 row;  // riegl.row - can be negative
+    // npy_int32 column; // riegl.column ditto
+    npy_int32 scan_line_index;  // riegl.scan_line_index - matching riegl datatype
+    npy_int32 shot_index_line; // riegl.shot_index_line - matching riegl datatype
     
     // info for attributing points to pulses
     npy_uint8 target_index; // riegl.target_index
@@ -381,9 +383,13 @@ public:
         CHECKBIND_READER(RDB_RIEGL_AMPLITUDE.name, RDBDataTypeDOUBLE, &m_buffer[0].amplitude)
         CHECKBIND_READER(RDB_RIEGL_XYZ.name, RDBDataTypeDOUBLE, &m_buffer[0].xyz)
         
+        // these are in version rdblib 2.4.0
+        CHECKBIND_READER(RDB_RIEGL_SCAN_LINE_INDEX.name, RDBDataTypeINT32, &m_buffer[0].scan_line_index)
+        CHECKBIND_READER(RDB_RIEGL_SHOT_INDEX_LINE.name, RDBDataTypeINT32, &m_buffer[0].shot_index_line)
+
         // these 2 don't appear to be documented, but are in there
-        CHECKBIND_READER("riegl.row", RDBDataTypeINT32, &m_buffer[0].row);
-        CHECKBIND_READER("riegl.column", RDBDataTypeINT32, &m_buffer[0].column);
+        // CHECKBIND_READER("riegl.row", RDBDataTypeINT32, &m_buffer[0].row);
+        // CHECKBIND_READER("riegl.column", RDBDataTypeINT32, &m_buffer[0].column);
         
         CHECKBIND_READER(RDB_RIEGL_TARGET_INDEX.name, RDBDataTypeUINT8, &m_buffer[0].target_index)
         CHECKBIND_READER(RDB_RIEGL_TARGET_COUNT.name, RDBDataTypeUINT8, &m_buffer[0].target_count)
@@ -706,8 +712,12 @@ public:
         // NOTE: this is for the first element (for the pulse), we have these
         // fields for each point (below) in case they are different
         // and to make the largelu point based processing easier.
-        pulse.scanline = std::abs(pCurrEl->row);
-        pulse.scanline_Idx = std::abs(pCurrEl->column);
+        
+        // pulse.scanline = std::abs(pCurrEl->row);
+        // pulse.scanline_Idx = std::abs(pCurrEl->column);    
+        pulse.scanline = pCurrEl->scan_line_index;
+        pulse.scanline_Idx = pCurrEl->shot_index_line;
+
         pulse.x_Idx = x;
         pulse.y_Idx = y;
         pulse.pts_start_idx = (npy_uint32)points.getNumElems();
@@ -729,8 +739,12 @@ public:
             point.x = pCurrEl->xyz[0];
             point.y = pCurrEl->xyz[1];
             point.z = pCurrEl->xyz[2];
-            point.scanline = std::abs(pCurrEl->row);
-            point.scanline_Idx = std::abs(pCurrEl->column);
+            
+            // point.scanline = std::abs(pCurrEl->row);
+            // point.scanline_Idx = std::abs(pCurrEl->column);
+            point.scanline = pCurrEl->scan_line_index;
+            point.scanline_Idx = pCurrEl->shot_index_line;
+
             point.return_Number = i + 1;  // 1-based
             point.rieglId = pCurrEl->id - (pCurrEl->target_index - 1);
 
