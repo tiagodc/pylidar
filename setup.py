@@ -210,11 +210,11 @@ def addLasDriver(extModules, cxxFlags):
 
         lasModule = Extension(name='pylidar.lidarformats._las',
                 sources=['src/las.cpp', 'src/pylidar.c'],
-                include_dirs=[os.path.join(lastoolsRoot, 'include')],
+                include_dirs=[os.path.join(lastoolsRoot, 'LASlib','inc'), os.path.join(lastoolsRoot, 'LASzip','src'), os.path.join(lastoolsRoot, 'LASzip','dll')],
                 extra_compile_args=cxxFlags,
                 define_macros = [NUMPY_MACROS],
                 libraries=['las'],
-                library_dirs=[os.path.join(lastoolsRoot, 'lib')])
+                library_dirs=[os.path.join(lastoolsRoot, 'LASlib', 'lib')])
                 
         extModules.append(lasModule)
     else:
