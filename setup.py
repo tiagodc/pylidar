@@ -213,8 +213,7 @@ def addLasDriver(extModules, cxxFlags):
                 include_dirs=[os.path.join(lastoolsRoot, 'LASlib','inc'), os.path.join(lastoolsRoot, 'LASzip','src'), os.path.join(lastoolsRoot, 'LASzip','dll'), os.path.join(lastoolsRoot, 'LASzip','include', 'laszip')],
                 extra_compile_args=cxxFlags,
                 define_macros = [NUMPY_MACROS],
-                libraries=['libLASlib.a'],
-                library_dirs=[os.path.join(lastoolsRoot, 'LASlib', 'lib')])
+                library_dirs=[os.path.join(lastoolsRoot, 'LASlib', 'lib', 'libLASlib.a')])
                 
         extModules.append(lasModule)
     else:
